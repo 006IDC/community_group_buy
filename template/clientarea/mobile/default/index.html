@@ -1,0 +1,54 @@
+<title>拼团优惠</title>
+<link rel="stylesheet" href="/plugins/addon/community_group_buy/public/group-buy.css?v=1.0.0">
+</head>
+<body>
+<div id="mainLoading"><div class="ddr ddr1"></div><div class="ddr ddr2"></div><div class="ddr ddr3"></div><div class="ddr ddr4"></div><div class="ddr ddr5"></div></div>
+<div id="cgb-client-shell" class="template" style="display:none">
+  <el-container><aside-menu></aside-menu><el-container><top-menu></top-menu><el-main>
+    <main id="cgb-client" class="cgb-page" v-pre>
+      <div id="cgb-client-message" class="cgb-message" role="status" aria-live="polite" hidden></div>
+      <header class="cgb-hero cgb-client-hero"><div><span>TOGETHER · BETTER PRICE</span><h1>选你喜欢的产品，自己发起拼团</h1><p>先选商品，再选3人、5人或10人团；成团后每个成员都会获得一次性首次开通权益。</p></div><div class="cgb-hero-badge"><small>普通团</small><strong>9 / 8 / 7 折</strong><span>仅限首次开通</span></div></header>
+      <section class="cgb-notice"><strong>续费说明</strong><span>团购只改变首次开通价，第二个月起按商品当时的 V10 正常续费价执行。</span></section>
+      <nav class="cgb-tabs" aria-label="拼团功能"><button class="is-active" data-client-tab="create">我要开团</button><button data-client-tab="groups">拼团广场</button><button data-client-tab="mine">我的拼团与权益</button></nav>
+
+      <section class="cgb-panel is-active" data-client-panel="create">
+        <section class="cgb-card cgb-create-flow">
+          <div class="cgb-flow-step"><span>1</span><div><h2>选择拼团模式</h2><p>普通团可选3人、5人或10人；0.1元基础款固定为10人团，每人首付0.1元。</p></div></div>
+          <div class="cgb-mode-options"><button id="cgb-mode-normal" class="cgb-choice is-selected" type="button"><strong>基础拼团</strong><span>3人9折 · 5人8折 · 10人7折</span></button><button id="cgb-mode-subsidy" class="cgb-choice is-special" type="button"><strong>10人团0.1元基础款</strong><span>10个成员每人首付0.1元</span></button></div>
+          <div class="cgb-flow-step"><span>2</span><div><h2>选择商品</h2><p>只显示当前支持该拼团模式的商品。</p></div></div>
+          <div id="cgb-create-products" class="cgb-client-grid"></div>
+          <div id="cgb-size-step"><div class="cgb-flow-step"><span>3</span><div><h2>选择成团人数</h2><p>人数越多，成团后的首次开通价越低。</p></div></div><div id="cgb-size-options" class="cgb-size-options"></div></div>
+          <div class="cgb-create-summary"><div id="cgb-create-summary">请先选择一款商品</div><button id="cgb-create" class="cgb-btn is-primary" type="button" disabled>发起拼团</button></div>
+        </section>
+      </section>
+
+      <section class="cgb-panel" data-client-panel="groups"><div class="cgb-section-head"><div><h2>正在等待成员的拼团</h2><p>选择你想买的商品与拼团模式参加。</p></div><button id="cgb-client-refresh" class="cgb-btn" type="button">刷新</button></div><div id="cgb-client-groups" class="cgb-client-grid"></div></section>
+      <section class="cgb-panel" data-client-panel="mine"><div id="cgb-client-mine" class="cgb-card-list"></div></section>
+
+      <div id="cgb-share-modal" class="cgb-share-modal" role="dialog" aria-modal="true" aria-labelledby="cgb-share-title" hidden>
+        <div class="cgb-share-backdrop" data-share-close="1"></div>
+        <section class="cgb-share-dialog">
+          <header><div><span class="cgb-kicker">GROUP INVITATION</span><h2 id="cgb-share-title">正在生成邀请卡…</h2><p id="cgb-share-meta">正在生成专属上车链接和二维码</p></div><button id="cgb-share-close" class="cgb-share-close" type="button" aria-label="关闭">×</button></header>
+          <div class="cgb-share-layout">
+            <div class="cgb-poster-wrap"><canvas id="cgb-share-canvas" width="750" height="1000" aria-label="拼团宣传图预览"></canvas></div>
+            <div class="cgb-share-tools">
+              <div><strong>上车链接</strong><p>好友打开后会定位到这个拼团，仍需登录并主动确认参团。</p></div>
+              <input id="cgb-share-url" type="text" readonly aria-label="拼团上车链接">
+              <div class="cgb-share-actions"><button id="cgb-share-copy" class="cgb-btn is-primary" type="button" disabled>复制上车链接</button><button id="cgb-share-native" class="cgb-btn" type="button" hidden disabled>分享给好友</button><button id="cgb-share-download" class="cgb-btn" type="button" disabled>保存宣传图</button></div>
+              <div class="cgb-share-tip"><strong>传播规则</strong><span>二维码和链接都只负责带好友进入当前团，不会绕过登录、白名单、名额和补贴风控。</span></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </el-main></el-container></el-container>
+</div>
+<script src="/plugins/addon/community_group_buy/public/group-buy-client.js?v=1.0.0"></script>
+<script>
+(function () {
+  function startFeature() { if (window.__cgbMounted) return; window.__cgbMounted = true; window.dispatchEvent(new Event('cgb:client-shell-mounted')); }
+  function boot() { document.title = '拼团优惠'; var shell = document.getElementById('cgb-client-shell'), loading = document.getElementById('mainLoading'); function show() { if (loading) loading.style.display = 'none'; if (shell) shell.style.display = 'block'; } if (shell && window.Vue) { var components = {}; if (window.lang) window.Vue.prototype.lang = Object.assign({}, window.lang, window.plugin_lang || {}); if (typeof asideMenu !== 'undefined') components.asideMenu = asideMenu; if (typeof topMenu !== 'undefined') components.topMenu = topMenu; new window.Vue({ el: '#cgb-client-shell', components: components, mounted: function () { show(); this.$nextTick(startFeature); } }); } else { show(); startFeature(); } }
+  if (document.readyState === 'complete') setTimeout(boot, 0);
+  else { var previous = window.onload; window.onload = function (event) { if (typeof previous === 'function') previous.call(window, event); boot(); }; }
+})();
+</script>

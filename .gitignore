@@ -1,0 +1,17 @@
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+dist/
+coverage/
+*.log
+*.zip
+*.tar
+*.tar.gz
+*.key
+*.pem
+*.p12
+*.pfx
+.env
+.env.*
+!.env.example

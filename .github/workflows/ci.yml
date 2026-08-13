@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.3', '8.3']
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: bcmath, mbstring, zip
+          coverage: none
+      - name: PHP syntax
+        run: find . -type f -name '*.php' -not -path './dist/*' -print0 | xargs -0 -n1 php -l
+      - name: Contract and money tests
+        run: |
+          php tests/money_test.php
+          php tests/contract_test.php
+          php tools/repository_audit.php
+      - name: JavaScript syntax
+        run: |
+          node --check public/group-buy-admin.js
+          node --check public/group-buy-client.js
+      - name: Template parity
+        run: |
+          cmp template/clientarea/index.html template/clientarea/pc/default/index.html
+          cmp template/clientarea/index.html template/clientarea/mobile/default/index.html
+      - name: Build and verify V10 package
+        run: php tools/build_release.php "$RUNNER_TEMP/community_group_buy.zip"

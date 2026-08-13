@@ -1,0 +1,51 @@
+<title>商品拼团</title>
+<link rel="stylesheet" href="/plugins/addon/community_group_buy/public/group-buy.css?v=1.0.0">
+</head>
+<body>
+<div id="cgb-admin" class="cgb-page">
+  <div id="cgb-message" class="cgb-message" role="status" aria-live="polite" hidden></div>
+  <header class="cgb-hero">
+    <div><span>COMMUNITY · GROUP BUY</span><h1>团购商品与获客补贴</h1><p>后台只决定哪些商品可以拼团；用户在会员中心自行选商品、选3人、5人或10人并发起拼团。</p></div>
+    <div class="cgb-hero-badge"><small>固定成本率</small><strong>65%</strong><span>普通团 9 / 8 / 7 折</span></div>
+  </header>
+
+  <section id="cgb-stats" class="cgb-stats"></section>
+  <section id="cgb-economics" class="cgb-economics"></section>
+
+  <nav class="cgb-tabs" aria-label="团购管理"><button class="is-active" data-tab="settings">商品白名单</button><button data-tab="groups">拼团记录</button></nav>
+
+  <section class="cgb-panel is-active" data-panel="settings">
+    <form id="cgb-settings-form" class="cgb-settings-layout">
+      <section class="cgb-card">
+        <div class="cgb-section-head"><div><h2>基础拼团白名单</h2><p>只有勾选商品才会出现在用户的发团选择中，用户可自行选3人9折、5人8折或10人7折。</p></div></div>
+        <label class="cgb-search">搜索商品<input id="cgb-normal-search" type="search" placeholder="输入商品名称或 ID"></label>
+        <div id="cgb-normal-products" class="cgb-product-picker" role="group" aria-label="基础拼团白名单"></div>
+      </section>
+
+      <section class="cgb-card cgb-subsidy-card">
+        <div class="cgb-section-head"><div><h2>10人团0.1元基础款</h2><p>这是独立的获客模式：成团后10个人每人首次开通都付0.1元，第二个月起按 V10 正常续费价执行。</p></div><label class="cgb-switch"><input id="cgb-subsidy-enabled" type="checkbox"><span>启用0.1元团</span></label></div>
+        <div class="cgb-warning" role="note"><strong>成本提示</strong><span>开一个0.1元团时会立即按“（基础售价 × 65% − 0.1元）× 10人”预留预算。建议只选没有高配可选项的独立基础款商品。</span></div>
+        <label class="cgb-search">搜索基础款<input id="cgb-subsidy-search" type="search" placeholder="输入商品名称或 ID"></label>
+        <div id="cgb-subsidy-products" class="cgb-product-picker" role="group" aria-label="0.1元基础款白名单"></div>
+        <div class="cgb-form-grid cgb-risk-fields">
+          <label>补贴总预算（元）<input id="cgb-budget" type="number" min="0" step="0.01" value="0"></label>
+          <label>每个用户终身成功享受0.1元次数<input id="cgb-lifetime" type="number" min="1" max="100" value="1"></label>
+          <label>拼团有效时间（分钟）<input id="cgb-group-expire" type="number" min="10" max="43200" value="1440"></label>
+          <label>成团后购买有效时间（分钟）<input id="cgb-claim-expire" type="number" min="10" max="43200" value="1440"></label>
+        </div>
+      </section>
+
+      <section class="cgb-card cgb-save-bar">
+        <div><strong>保存影响</strong><p>从白名单移除商品或关闭0.1元模式，会立即终止相关的未成团并释放预留预算；已成团、已发权益和已有订单不追溯修改。</p></div>
+        <button id="cgb-save" class="cgb-btn is-primary" type="submit">保存白名单与风控设置</button>
+      </section>
+    </form>
+  </section>
+
+  <section class="cgb-panel" data-panel="groups">
+    <section class="cgb-card"><div class="cgb-section-head"><div><h2>拼团与权益记录</h2><p>普通团和0.1元团都在这里查看，价格与风控参数以发团时快照为准。</p></div><button id="cgb-refresh-groups" class="cgb-btn" type="button">刷新</button></div>
+      <div class="cgb-table-wrap"><table><thead><tr><th>团号</th><th>商品</th><th>模式</th><th>进度</th><th>状态</th><th>预留亏损</th><th>成团/截止</th></tr></thead><tbody id="cgb-groups"></tbody></table></div>
+    </section>
+  </section>
+</div>
+<script src="/plugins/addon/community_group_buy/public/group-buy-admin.js?v=1.0.0"></script>
