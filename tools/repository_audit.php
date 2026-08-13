@@ -41,7 +41,7 @@ $patterns = [
     'AWS Access Key' => '/\bAK' . 'IA[0-9A-Z]{16}\b/',
     '本机用户路径' => '#/(?:Us' . 'ers|ho' . 'me)/[^/\s]+/#',
     'macOS 临时目录' => '#/var/fol' . 'ders/[A-Za-z0-9_/.-]+#',
-    '历史品牌或内部更新标识' => '/(?:ZeroZero' . 'Six|zero_zero_' . 'six|零零' . '陆|zz' . '6gb|Private' . 'Updater)/i',
+    '历史内部更新标识' => '/(?:zz' . '6gb|Private' . 'Updater)/i',
     'IPv4 地址' => '/(?<![0-9.])(?:25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})(?:\.(?:25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})){3}(?![0-9.])/',
 ];
 foreach (auditFiles($root) as $relative => $path) {
@@ -66,7 +66,9 @@ foreach (auditFiles($root) as $relative => $path) {
     if (preg_match_all('#https?://([A-Za-z0-9.-]+)(?::[0-9]{1,5})?#i', $content, $urls)) {
         foreach ($urls[1] as $host) {
             $host = strtolower((string) $host);
-            if ($host !== '' && $host !== 'example.com' && substr($host, -12) !== '.example.com') {
+            if ($host !== ''
+                && !in_array($host, ['example.com', 'github.com', 'img.shields.io'], true)
+                && substr($host, -12) !== '.example.com') {
                 $failures[] = $relative . ' 含非示例域名：' . $host;
             }
         }

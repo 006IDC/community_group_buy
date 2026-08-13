@@ -6,9 +6,7 @@
 
 ## 报告漏洞
 
-请优先通过仓库的 **Security → Advisories → Report a vulnerability** 私下报告，并附上受影响版本、复现步骤、影响范围和建议修复方式。请勿在公开 Issue 中披露可利用细节、客户数据、服务器地址、访问令牌或订单信息。
-
-如果仓库尚未启用 Private vulnerability reporting，请只创建一个不含敏感细节的公开 Issue，请维护者开通私下沟通渠道。
+请通过仓库的 **Security → Advisories → Report a vulnerability** 私下报告，并附上受影响版本、复现步骤、影响范围和建议修复方式。请勿在公开 Issue 中披露可利用细节、客户数据、服务器地址、访问令牌或订单信息。
 
 维护者确认前，请不要扫描或测试不属于你的生产系统。测试数据中不得包含真实客户资料。
 

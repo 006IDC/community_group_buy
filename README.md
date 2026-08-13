@@ -1,5 +1,11 @@
 # 商品拼团 1.0.0
 
+[![CI](https://github.com/006IDC/community_group_buy/actions/workflows/ci.yml/badge.svg)](https://github.com/006IDC/community_group_buy/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/006IDC/community_group_buy)](https://github.com/006IDC/community_group_buy/releases)
+[![License](https://img.shields.io/github/license/006IDC/community_group_buy)](LICENSE)
+
+由 [零零陆云计算（006IDC）](https://github.com/006IDC) 独立维护。
+
 适用于 ZJMF-CBAP V10 的开源 Addon。管理员维护可参团商品白名单，用户在自己的会员中心选择商品，再选择 3 人、5 人、10 人普通团，或参加可单独开关的“10 人团 0.1 元基础款”。
 
 本仓库只包含插件原创源码，不包含 V10 本体、官方商业插件、客户数据、服务器资料、访问凭据或签名私钥。
