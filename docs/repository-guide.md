@@ -139,6 +139,14 @@ cp -a /tmp/community-group-buy-install/community_group_buy /var/www/example/publ
 
 ## 开发与验证
 
+开发构建时，源码目录仍须命名为 `community_group_buy`；仓库技术名与插件安装身份分别维护：
+
+```bash
+git clone https://github.com/006IDC/v10-group-buy-public.git community_group_buy
+cd community_group_buy
+```
+
+
 ```bash
 php tests/money_test.php
 php tests/contract_test.php
