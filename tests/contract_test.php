@@ -32,6 +32,8 @@ $clientScript = file_get_contents($root . '/public/group-buy-client.js');
 $adminTemplate = file_get_contents($root . '/template/admin/index.html');
 $clientTemplate = file_get_contents($root . '/template/clientarea/index.html');
 $readme = file_get_contents($root . '/README.md');
+// Detailed business and upgrade guidance lives in the repository guide.
+$readme .= "\n" . file_get_contents($root . '/docs/repository-guide.md');
 
 foreach (['install', 'upgrade', 'uninstall', 'beforeOrderCreate', 'afterOrderCreate', 'orderPaid',
              'afterOrderRefund', 'afterOrderCancel', 'afterOrderDelete', 'minuteCron'] as $method) {
