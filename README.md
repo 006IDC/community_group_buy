@@ -1,4 +1,4 @@
-# V10 商品拼团插件
+# V10 商品拼团插件（开源版）
 
 ## 产品介绍
 
@@ -8,7 +8,7 @@ V10 开源商品拼团 Addon，支持 3、5、10 人团及独立可控的 0.1 �
 
 | 项目 | 公开说明 |
 | --- | --- |
-| 公开发行版本 | [v1.0.0](https://github.com/006IDC/community_group_buy/releases/tag/v1.0.0) |
+| 公开发行版本 | [v1.0.0](https://github.com/006IDC/v10-group-buy-public/releases/tag/v1.0.0) |
 | 适用环境 | 公开说明已验证基线 V10 10.4.6；PHP 7.3+ / BCMath / Mbstring |
 | 使用边界 | 其他 V10 10.x 小版本上线前须隔离回归；依赖官方 PromoCode。0.1 元模式是预算补贴，默认关闭，不是保本承诺。 |
 
@@ -23,7 +23,7 @@ V10 开源商品拼团 Addon，支持 3、5、10 人团及独立可控的 0.1 �
 
 ## 使用与升级
 
-从 [Releases](https://github.com/006IDC/community_group_buy/releases) 下载 `community_group_buy_1.0.0_v10_import.zip`，通过 V10 Addon 管理导入、安装并启用。保持 `CommunityGroupBuy / community_group_buy` 身份；升级前备份数据库及插件目录，不用卸载重装代替常规升级。详见[部署说明](DEPLOYMENT.md)和[技术说明](docs/repository-guide.md)。
+从 [Releases](https://github.com/006IDC/v10-group-buy-public/releases) 下载 `community_group_buy_1.0.0_v10_import.zip`，通过 V10 Addon 管理导入、安装并启用。保持 `CommunityGroupBuy / community_group_buy` 身份；升级前备份数据库及插件目录，不用卸载重装代替常规升级。详见[部署说明](DEPLOYMENT.md)和[技术说明](docs/repository-guide.md)。
 
 ## 版本演进
 
