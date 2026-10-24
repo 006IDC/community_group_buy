@@ -1,38 +1,36 @@
-# V10 商品拼团插件：运行与维护说明
+# V10 商品拼团插件 · 使用说明
 
-[返回产品首页](../README.md)。以下完整保留整理前的公开 README 技术内容与来源、版权及许可证声明；仅调整移入 `docs/` 后的仓内链接。内容对应原公开说明，不新增测试或部署结论。
+面向 ZJMF-CBAP V10 的独立 Addon。管理员维护商品白名单，用户在会员中心自行选择商品、开团并邀请其他用户参与。
 
----
+[产品首页](../README.md) · [部署说明](../DEPLOYMENT.md) · [配置说明](CONFIGURATION.md) · [版本下载](https://github.com/006IDC/v10-group-buy-public/releases) · [更新记录](../CHANGELOG.md)
 
-# 商品拼团 1.0.0
+## 使用前确认
 
-[![CI](https://github.com/006IDC/community_group_buy/actions/workflows/ci.yml/badge.svg)](https://github.com/006IDC/community_group_buy/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/006IDC/community_group_buy)](https://github.com/006IDC/community_group_buy/releases)
-[![License](https://img.shields.io/github/license/006IDC/community_group_buy)](../LICENSE)
+- 当前公开发行：`1.0.0`；稳定身份为 `CommunityGroupBuy / community_group_buy`。
+- 已验证基线为 V10 10.4.6；设计范围为 10.4.6 至 10.x，其他小版本须先在隔离环境回归。
+- PHP 7.3+，需 BCMath、Mbstring；必须启用官方“优惠码插件（基础版）”`PromoCode`。本地构建 ZIP 另需 Zip 扩展。
+- 0.1 元模式默认关闭，是预算控制的获客补贴，不是保本方案。续费仍由 V10 按当时正常价格处理。
 
-由 [零零陆云计算（006IDC）](https://github.com/006IDC) 独立维护。
+## 安装与首次配置
 
-适用于 ZJMF-CBAP V10 的开源 Addon。管理员维护可参团商品白名单，用户在自己的会员中心选择商品，再选择 3 人、5 人、10 人普通团，或参加可单独开关的“10 人团 0.1 元基础款”。
+1. 下载 `community_group_buy_1.0.0_v10_import.zip`，在 V10 Addon 管理中上传、安装并启用；不要上传自动 Source code ZIP。
+2. 配置 V10 会员中心可信 HTTPS 地址，选择普通拼团商品白名单，验证 3 人、5 人、10 人团入口。
+3. 如需补贴模式，使用独立的基础商品白名单，先设置总预算、每用户终身次数、成团时限和成团后购买时间。
+4. 核对整团预留亏损后，再单独开启 0.1 元模式。
 
-本仓库只包含插件原创源码，不包含 V10 本体、官方商业插件、客户数据、服务器资料、访问凭据或签名私钥。
+详细目录、后台导入、手工放置与安装检查见[部署说明](../DEPLOYMENT.md)。只复制文件仍需后台安装与启用，不能手工向核心表插入插件记录；配置统一写入官方 `plugin.config`，不需手工执行 SQL。
 
-- 作者：`006IDC`
-- 许可证：MIT
-- 插件身份：`CommunityGroupBuy / community_group_buy`
+## 用户参团流程
 
-## 核心能力
+1. 用户选择对应白名单中未隐藏的付费商品并发起团，管理员不代替用户创建活动。
+2. 普通团为 3 人 9 折、5 人 8 折、10 人 7 折；0.1 元模式使用独立开关与白名单。
+3. 开团后可复制上车链接、保存二维码和 750×1000 宣传图。链接只定位拼团，不绕过登录或参团校验。
+4. 成团后为每名成员生成绑定本人、指定商品、仅限新购的一次性官方优惠权益，不可用于续费。
+5. 0.1 元团满 10 人后，每名成员首次开通价为 0.1 元；需遵守预算、终身次数及有效期限制。
 
-- 用户自助选择商品并发起拼团，管理员不代替用户创建活动。
-- 普通团固定为 3 人 9 折、5 人 8 折、10 人 7 折。
-- 10 人 0.1 元模式默认关闭；开启后，满团 10 人每人的首次开通价均为 0.1 元。
-- 普通团和 0.1 元模式分别使用商品白名单，不支持活动的商品不会出现在用户端。
-- 开团后生成上车链接、二维码和 750×1000 宣传图；链接只负责定位拼团，不绕过登录和参团校验。
-- 成团后为每名成员生成绑定本人、指定商品、仅限新购且不可续费的一次性官方优惠权益。
-- 白名单和风控参数复用 V10 官方 `plugin.config`，运行数据只新增两张必要业务表。
+## 价格与补贴口径
 
-## 价格与成本
-
-插件按商品售价的 65% 估算成本。理论保本比例为 65%；普通团额外保留 5 个百分点的售价安全垫，所以最低实付比例为 70%。
+插件按商品售价的 65% 估算成本，普通团另留 5 个百分点安全垫，最低实付为 70%。这是插件的估算口径，不代表实际经营成本或收益承诺。
 
 | 团型 | 用户实付 | 按售价计毛利 | 按收入计毛利率 |
 | --- | ---: | ---: | ---: |
@@ -40,114 +38,31 @@
 | 5 人团 | 80% | 15% | 约 18.75% |
 | 10 人团 | 70% | 5% | 约 7.14% |
 
-0.1 元模式是明确的获客补贴，不是保本方案：
+0.1 元模式单独计算预算：
 
 ```text
 每人预计亏损 = max(基础售价 × 65% - 0.10, 0)
 整团预留亏损 = 每人预计亏损 × 10
 ```
 
-例如基础售价为 156.00 元时，每人预计亏损 101.30 元，发起一个 10 人团会预留 1013.00 元预算。第二个月起仍由 V10 按当时的正常续费价处理。
+基础售价 156.00 元时，每人预计亏损 101.30 元，10 人团预留预算 1013.00 元。第二个月起仍按正常续费价处理。
 
-## 兼容性与依赖
+## 身份与数据边界
 
-- 已验证基线：ZJMF-CBAP V10 10.4.6。
-- 设计兼容范围：V10 10.4.6 至 10.x；其他小版本上线前应在隔离环境回归。
-- PHP 7.3 或更高版本。
-- PHP 扩展：BCMath、Mbstring；本地构建 ZIP 还需要 Zip。
-- 必需依赖：V10 官方“优惠码插件（基础版）”，插件标识 `PromoCode`。
+- 模块 `addon`；插件名/入口类 `CommunityGroupBuy`；目录 `community_group_buy`；入口 `CommunityGroupBuy.php`。
+- 用户接口 `/console/v1/community_group_buy`，管理接口 `/{后台目录}/v1/community_group_buy`。发布后不改这些身份，1.0.0 开源包不覆盖其他名称的同类插件。
+- 只新增 `addon_community_group_buy_group`（团状态、人数、时效与风控快照）和 `addon_community_group_buy_member`（成员、权益与官方优惠码引用）两张业务表，其余复用宿主。
+- 正常升级保留完整插件目录并执行幂等 `upgrade()`，不卸载重装。卸载默认保留经营及订单归因数据；恢复文件不等于撤回 MySQL DDL，详见[升级与回退](../DEPLOYMENT.md)。
 
-## 安装与部署
-
-### 环境要求
-
-- ZJMF-CBAP V10 10.4.6 或更高的 10.x 版本。
-- PHP 7.3+，启用 BCMath、Mbstring。
-- V10 官方“优惠码插件（基础版）”已经安装并启用。
-- 建议在 V10 后台把会员中心地址配置为 `https://example.com`，邀请链接优先使用该可信地址。
-
-### 后台导入安装
-
-1. 从 GitHub Release 下载 `community_group_buy_1.0.0_v10_import.zip`。
-2. 登录 V10 后台，确认官方优惠码插件已经启用。
-3. 进入 Addon 插件管理，上传 ZIP 并执行安装。
-4. 启用“商品拼团”。
-5. 进入插件管理页，先选择“基础拼团商品白名单”。
-6. 需要 0.1 元模式时，先设置总预算、终身次数和有效期，再单独开启开关。
-
-不要上传 GitHub 自动生成的 Source code 压缩包。V10 安装包必须只有一个 `community_group_buy/` 根目录，入口文件为 `CommunityGroupBuy.php`。
-
-### 手工放入 plugins 目录
-
-仅在后台不能上传时使用。以下 `/var/www/example` 是示例 V10 应用根目录：
-
-```bash
-unzip community_group_buy_1.0.0_v10_import.zip -d /tmp/community-group-buy-install
-cp -a /tmp/community-group-buy-install/community_group_buy /var/www/example/public/plugins/addon/
-```
-
-复制后仍需在 V10 后台执行安装和启用，让系统创建插件记录、权限、导航、Hook 和两张业务表。不要手工向 V10 核心表插入插件记录。
-
-### 首次配置
-
-1. 选择允许参加普通团的商品。
-2. 在用户端验证 3 人、5 人和 10 人团入口。
-3. 如需使用 0.1 元模式，只把独立、低配置的基础商品加入对应白名单。
-4. 设置补贴总预算、每用户终身次数、拼团有效时间和成团后购买时间。
-5. 核对管理页显示的整团预留亏损后再启用 0.1 元模式。
-
-所有设置通过一个后台保存接口原子写入 V10 官方 `plugin.config`，不需要手工执行 SQL。
-
-### 安装后验证
-
-- 后台导航显示“商品拼团”，用户端导航显示“拼团优惠”。
-- 用户端只展示对应白名单中未隐藏的付费商品。
-- 发团按钮具有处理中、成功和失败反馈，并阻止重复提交。
-- 开团成功后可以复制上车链接并保存二维码宣传图。
-- 0.1 元模式关闭后，接口也不能绕过开关发起补贴团。
-- 新安装只创建 `addon_community_group_buy_group` 和 `addon_community_group_buy_member` 两张插件业务表。
-
-### 升级与回滚
-
-升级前备份数据库和 `public/plugins/addon/community_group_buy`，通过目标 V10 支持的插件升级流程替换文件并执行幂等 `upgrade()`。不要通过卸载再安装完成常规升级。
-
-文件升级失败时恢复完整插件目录；数据库迁移失败时保留现场并核对迁移日志。MySQL DDL 可能隐式提交，恢复文件不等于恢复表结构。若只需停止业务，请禁用插件或关闭 0.1 元模式；卸载默认保留经营与订单归因数据。
-
-更详细的故障排查见 [DEPLOYMENT.md](../DEPLOYMENT.md)。
-
-## 开源身份
-
-| 项目 | 固定值 |
-| --- | --- |
-| 模块 | `addon` |
-| 插件名 / 入口类 | `CommunityGroupBuy` |
-| 插件目录 | `community_group_buy` |
-| 入口文件 | `CommunityGroupBuy.php` |
-| 用户接口前缀 | `/console/v1/community_group_buy` |
-| 管理接口前缀 | `/{后台目录}/v1/community_group_buy` |
-
-发布后不要修改这些身份字段，否则 V10 会把它识别为另一个插件。该开源身份从 1.0.0 开始，不用于覆盖其他名称的同类插件。
-
-## 数据库边界
-
-新安装只创建：
-
-- `addon_community_group_buy_group`：团状态、人数、时效与发团时风控快照。
-- `addon_community_group_buy_member`：团与用户的唯一成员关系、权益状态及官方优惠码引用。
-
-其余数据复用 V10 官方表。详情见 [docs/DATABASE.md](../docs/DATABASE.md) 和 [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md)。
+数据与实现边界见[数据库说明](DATABASE.md)、[架构说明](ARCHITECTURE.md)及[V10 合规说明](V10_COMPLIANCE.md)。
 
 ## 开发与验证
 
-开发构建时，源码目录仍须命名为 `community_group_buy`；仓库技术名与插件安装身份分别维护：
+源码目录必须命名为 `community_group_buy`；从源码开发时执行：
 
 ```bash
 git clone https://github.com/006IDC/v10-group-buy-public.git community_group_buy
 cd community_group_buy
-```
-
-
-```bash
 php tests/money_test.php
 php tests/contract_test.php
 php tools/repository_audit.php
@@ -158,18 +73,10 @@ php tools/build_release.php
 php tools/build_source_archive.php
 ```
 
-`tools/build_release.php` 生成仅含 20 个运行文件的 V10 导入包；`tools/build_source_archive.php` 生成包含许可证、文档、测试、CI 和构建工具的源码归档。
+构建工具分别生成含 20 个运行文件的 V10 导入包，以及含许可、文档、测试、CI 与构建工具的源码归档。仅在源码/隔离环境进行这些检查；不把源码包当后台安装包。
 
-## 文档
+## 安全与许可
 
-- [部署说明](../DEPLOYMENT.md)
-- [配置说明](../docs/CONFIGURATION.md)
-- [架构说明](../docs/ARCHITECTURE.md)
-- [数据库审计](../docs/DATABASE.md)
-- [V10 合规说明](../docs/V10_COMPLIANCE.md)
-- [安全策略](../SECURITY.md)
-- [贡献指南](../CONTRIBUTING.md)
+本仓库不含 V10 本体、官方商业插件、客户数据、服务器资料、凭据或签名私钥。安全问题见[安全策略](../SECURITY.md)，贡献方式见[贡献指南](../CONTRIBUTING.md)。
 
-## 许可证
-
-原创代码采用 [MIT License](../LICENSE)。V10、官方优惠码插件和宿主系统提供的二维码组件不属于本仓库授权范围，见 [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md)。
+原创代码采用 [MIT License](../LICENSE)。V10、官方优惠码插件与宿主二维码组件不在本仓授权范围，见[第三方声明](../THIRD_PARTY_NOTICES.md)。由[零零陆云计算（006IDC）](https://github.com/006IDC)独立维护。

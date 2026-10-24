@@ -1,19 +1,25 @@
-# 部署说明
+# V10 商品拼团插件 · 部署说明
 
-本文面向首次安装和测试部署。生产环境操作前请同时备份数据库与插件目录，并在维护窗口执行。
+适用于公开版 `1.0.0`。首次安装和测试部署按下列顺序进行；生产操作前备份数据库与插件目录，并安排维护窗口。
 
-## 1. 环境要求
+[产品首页](README.md) · [使用说明](docs/repository-guide.md) · [配置说明](docs/CONFIGURATION.md) · [版本下载](https://github.com/006IDC/v10-group-buy-public/releases)
 
-- ZJMF-CBAP V10 10.4.6 或更高的 10.x 版本。
+## 1. 部署前检查
+
+- 已验证基线为 ZJMF-CBAP V10 10.4.6；其他 10.x 小版本先在隔离环境回归。
 - PHP 7.3+，启用 BCMath、Mbstring。
 - V10 官方“优惠码插件（基础版）”已经安装并启用。
-- V10 后台的会员中心地址建议配置为 `https://example.com`，分享链接会优先使用该可信地址。
+- V10 后台的会员中心地址建议配置为 自己的 HTTPS 地址（如文档占位地址 `https://example.com`，实际部署须替换），分享链接会优先使用该可信地址。
 
 本插件不需要 Composer、Node.js 或单独的守护进程。Node.js 和 PHP Zip 只用于源码仓库中的本地检查与打包。
 
-## 2. 推荐：后台导入安装
+稳定身份为 `addon / CommunityGroupBuy / community_group_buy`，不要修改目录、入口文件或入口类，也不要用本包覆盖其他名称的同类插件。
 
-1. 下载 `community_group_buy_1.0.0_v10_import.zip`。
+## 2. 获取并安装
+
+### 推荐：后台导入
+
+1. 从[版本下载](https://github.com/006IDC/v10-group-buy-public/releases)获取 `community_group_buy_1.0.0_v10_import.zip`。
 2. 登录 V10 后台，确认官方优惠码插件已启用。
 3. 进入插件管理，上传上述 ZIP 并执行安装。
 4. 启用“商品拼团”。
@@ -22,7 +28,7 @@
 
 安装包根目录必须只有一个 `community_group_buy/`，其下直接包含 `CommunityGroupBuy.php`、`route.php` 等运行文件。GitHub 自动生成的源码压缩包不符合这一导入格式。
 
-## 3. 可选：手工放入 plugins 目录
+### 可选：手工放置
 
 仅在后台不支持上传时使用。以下路径中的 `/var/www/example` 是示例 V10 应用根目录，请替换为你的实际路径。
 
@@ -35,11 +41,13 @@ cp -a /tmp/community-group-buy-install/community_group_buy /var/www/example/publ
 
 文件属主与权限应沿用同目录内其他 Addon；不要为了排障把插件目录设为全局可写。
 
-## 4. 首次配置
+使用空的临时解压目录，并在复制前核对包内顶层目录，避免混入旧文件。
+
+## 3. 首次配置
 
 建议顺序：
 
-1. 配置 V10 会员中心地址为 `https://example.com`。
+1. 将 V10 会员中心地址配置为自己的可信 HTTPS 地址，不使用 `example.com` 占位值。
 2. 选择普通拼团商品白名单。
 3. 在用户端验证 3 人、5 人、10 人团入口。
 4. 设置 0.1 元模式总预算、每用户终身次数、成团时限和权益领取时限。
@@ -48,7 +56,9 @@ cp -a /tmp/community-group-buy-install/community_group_buy /var/www/example/publ
 
 所有配置由后台单一保存接口原子写入 `plugin.config`，无需执行 SQL。
 
-## 5. 安装后检查
+0.1 元模式默认关闭，是明确的获客补贴，不是保本承诺；普通团与补贴团的商品白名单独立。预算估算与续费边界见[使用说明](docs/repository-guide.md#价格与补贴口径)。
+
+## 4. 验证部署
 
 - 后台导航显示“商品拼团”，没有显示原始语言键。
 - 用户端导航显示“拼团优惠”。
@@ -59,7 +69,11 @@ cp -a /tmp/community-group-buy-install/community_group_buy /var/www/example/publ
 - 新安装只存在两张以 `addon_community_group_buy_` 开头的业务表。
 - PHP 和 Web 日志中没有 SQL 原文、绝对路径、客户资料或访问凭据被返回到浏览器。
 
-## 6. 升级
+开发检查与构建命令见[使用说明](docs/repository-guide.md#开发与验证)，不能替代目标 V10 的安装与业务验证。
+
+## 5. 升级与回退
+
+### 正常升级
 
 不要通过卸载再安装完成升级，因为卸载默认保留业务数据，重新安装还可能改变插件 ID 和导航地址。
 
@@ -73,13 +87,13 @@ cp -a /tmp/community-group-buy-install/community_group_buy /var/www/example/publ
 
 如果当前 V10 实例没有可靠的第三方插件升级入口，应先在隔离环境验证站点自己的发布流程，不要在生产环境直接覆盖运行目录后跳过 `upgrade()`。
 
-## 7. 回滚
+### 异常回退与停用
 
 文件升级失败时恢复升级前的完整插件目录；数据库迁移失败时保留现场并先核对迁移日志。MySQL DDL 可能隐式提交，不能假设恢复文件会自动恢复表结构。
 
 若只是关闭业务，请优先在后台禁用插件或关闭 0.1 元模式。`uninstall()` 默认保留团购和订单归因数据，不会自动删除两张业务表。
 
-## 8. 常见问题
+## 6. 常见问题
 
 ### 页面 404 或接口不存在
 
@@ -96,3 +110,5 @@ cp -a /tmp/community-group-buy-install/community_group_buy /var/www/example/publ
 ### 页面仍显示旧脚本或旧文案
 
 清理插件语言缓存、模板编译缓存、OPcache 以及浏览器/CDN 静态资源缓存，并确认页面加载的资源版本与入口版本一致。
+
+源码检查不能替代目标实例的安装、配置与业务验证。
