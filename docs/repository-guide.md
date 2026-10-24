@@ -1,6 +1,6 @@
 # V10 商品拼团插件 · 使用说明
 
-面向 ZJMF-CBAP V10 的独立 Addon。管理员维护商品白名单，用户在会员中心自行选择商品、开团并邀请其他用户参与。
+面向 ZJMF-CBAP V10 的独立 Addon。管理员维护商品白名单，用户自助选择商品并开团，再邀请其他用户参与。
 
 [产品首页](../README.md) · [部署说明](../DEPLOYMENT.md) · [配置说明](CONFIGURATION.md) · [版本下载](https://github.com/006IDC/v10-group-buy-public/releases) · [更新记录](../CHANGELOG.md)
 
@@ -13,7 +13,7 @@
 
 ## 安装与首次配置
 
-1. 下载 `community_group_buy_1.0.0_v10_import.zip`，在 V10 Addon 管理中上传、安装并启用；不要上传自动 Source code ZIP。
+1. 下载 `community_group_buy_1.0.0_v10_import.zip`，在 V10 Addon 管理中上传、安装并启用；不要上传 GitHub 自动生成的 Source code 压缩包。
 2. 配置 V10 会员中心可信 HTTPS 地址，选择普通拼团商品白名单，验证 3 人、5 人、10 人团入口。
 3. 如需补贴模式，使用独立的基础商品白名单，先设置总预算、每用户终身次数、成团时限和成团后购买时间。
 4. 核对整团预留亏损后，再单独开启 0.1 元模式。
@@ -51,7 +51,7 @@
 
 - 模块 `addon`；插件名/入口类 `CommunityGroupBuy`；目录 `community_group_buy`；入口 `CommunityGroupBuy.php`。
 - 用户接口 `/console/v1/community_group_buy`，管理接口 `/{后台目录}/v1/community_group_buy`。发布后不改这些身份，1.0.0 开源包不覆盖其他名称的同类插件。
-- 只新增 `addon_community_group_buy_group`（团状态、人数、时效与风控快照）和 `addon_community_group_buy_member`（成员、权益与官方优惠码引用）两张业务表，其余复用宿主。
+- 新安装只创建 `addon_community_group_buy_group`（团状态、人数、时效与风控快照）和 `addon_community_group_buy_member`（成员、权益与官方优惠码引用）两张业务表，其余复用宿主。
 - 正常升级保留完整插件目录并执行幂等 `upgrade()`，不卸载重装。卸载默认保留经营及订单归因数据；恢复文件不等于撤回 MySQL DDL，详见[升级与回退](../DEPLOYMENT.md)。
 
 数据与实现边界见[数据库说明](DATABASE.md)、[架构说明](ARCHITECTURE.md)及[V10 合规说明](V10_COMPLIANCE.md)。
